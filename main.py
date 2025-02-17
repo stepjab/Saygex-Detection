@@ -1,7 +1,6 @@
 import sys
 import time
 import threading
-import random
 from datetime import datetime, timedelta
 from ML_TRASH_VIDEO import VideoProcessor # ---------------------------------------------------------------
 from huggingface_hub import hf_hub_download
@@ -166,8 +165,6 @@ class NotificationCard(QWidget):
 # -------------------------------
 # Главное окно
 # -------------------------------
-class MainWindow(QMainWindow):
-    from ML_TRASH_VIDEO import VideoProcessor
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -182,7 +179,7 @@ class MainWindow(QMainWindow):
         # Инициализация модели и обработчика видео
         model_path1 = "norm.pt"
         model_path2 = "yolov8m-seg.pt"
-        video_path = "platform2.mkv"  # Путь к видео ГОЙДАААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА
+        video_path = 0  # Путь к видео ГОЙДАААААААААААААААААААААААААААААААААААААААААААААА
         self.video_processor = VideoProcessor(video_path, model_path1, model_path2)  # Ваш класс VideoProcessor
         self.video_processor.garbageDetected.connect(self.handleNewGarbage)
 

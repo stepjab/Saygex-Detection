@@ -13,8 +13,8 @@ class VideoProcessor(QThread):
         self.video_path = video_path
         self.model1 = YOLO(model_path1)
         self.model2 = YOLO(model_path2)
-        self.tracker = Sort()  # Initialize SORT tracker
-        self.detected_objects = set()  # Set to track already detected objects
+        self.tracker = Sort()
+        self.detected_objects = set()
 
     def run(self):
         cap = cv2.VideoCapture(self.video_path) # ГОЙДААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААа
@@ -49,8 +49,8 @@ class VideoProcessor(QThread):
                 _, motion_mask = cv2.threshold(frame_diff, motion_threshold, 255, cv2.THRESH_BINARY)
 
                 if frame_count % frame_interval == 0:
-                    results1 = self.model1(frame, conf=0.25, save=False, imgsz=1088)
-                    results2 = self.model2(frame, conf=0.25, save=False, imgsz=1088)
+                    results1 = self.model1(frame, conf=0.25, save=False, imgsz=640)
+                    results2 = self.model2(frame, conf=0.25, save=False, imgsz=640)
 
                     boxes1 = results1[0].boxes.data.cpu().numpy()
                     boxes2 = results2[0].boxes.data.cpu().numpy()
