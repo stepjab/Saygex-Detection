@@ -17,7 +17,7 @@ class VideoProcessor(QThread):
         self.detected_objects = set()
 
     def run(self):
-        cap = cv2.VideoCapture(self.video_path) # ГОЙДААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААа
+        cap = cv2.VideoCapture(self.video_path)
         frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         fps = int(cap.get(cv2.CAP_PROP_FPS))
@@ -35,6 +35,9 @@ class VideoProcessor(QThread):
         while cap.isOpened():
             success, frame = cap.read()
             if success:
+                # Улучшение контрастности кадра
+                frame = self.enhance_contrast(frame)
+
                 # Convert the frame to grayscale
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -108,6 +111,33 @@ class VideoProcessor(QThread):
 
         cap.release()
         cv2.destroyAllWindows()
+
+    def enhance_contrast(self, image):
+        """
+        Улучшает контрастность изображения с использованием CLAHE.
+
+        :param image: Входное изображение в формате BGR.
+        :return: Изображение с улучшенной контрастностью.
+        """
+        # Преобразуем изображение в цветовое пространство LAB
+        lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+
+        # Разделяем компоненты LAB
+        l, a, b = cv2.split(lab)
+
+        # Создаем объект CLAHE
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+
+        # Применяем CLAHE к L-каналу
+        enhanced_l = clahe.apply(l)
+
+        # Объединяем улучшенный L-канал с оригинальными A и B каналами
+        enhanced_lab = cv2.merge((enhanced_l, a, b))
+
+        # Преобразуем изображение обратно в цветовое пространство BGR
+        enhanced_image = cv2.cvtColor(enhanced_lab, cv2.COLOR_LAB2BGR)
+
+        return enhanced_image
 
     def remove_duplicates(self, boxes, iou_threshold=0.5, score_threshold=0.2):
         indices = cv2.dnn.NMSBoxes(boxes[:, :4], boxes[:, 4], score_threshold, iou_threshold)

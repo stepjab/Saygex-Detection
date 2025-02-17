@@ -179,7 +179,7 @@ class MainWindow(QMainWindow):
         # Инициализация модели и обработчика видео
         model_path1 = "norm.pt"
         model_path2 = "yolov8m-seg.pt"
-        video_path = 0  # Путь к видео ГОЙДАААААААААААААААААААААААААААААААААААААААААААААА
+        video_path = "snowplatform.mkv"  # Путь к видео ГОЙДАААААААААААААААААААААААААААААААААААААААААААААА
         self.video_processor = VideoProcessor(video_path, model_path1, model_path2)  # Ваш класс VideoProcessor
         self.video_processor.garbageDetected.connect(self.handleNewGarbage)
 
